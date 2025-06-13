@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clown der Zählt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Futura&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Futura', 'Courier New', monospace;
+      background: linear-gradient(135deg, #111 50%, #800000 50%);
+      color: #eee;
+      text-align: center;
+      padding: 30px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-family: 'Futura', sans-serif;
+      font-size: 3.2em;
+      font-weight: bold;
+      color: #ff0000;
+      text-shadow: 1px 1px 0 #000;
+      margin-bottom: 30px;
+    }
+
+    .clown {
+      width: 80vw;
+      max-width: 400px;
+      margin: 0 auto 30px auto;
+      position: relative;
+    }
+
+    .clown img {
+      width: 100%;
+      filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+      transition: filter 0.3s;
+      position: relative;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .nose {
+      position: absolute;
+      width: 65px;
+      height: 48px;
+      background: transparent;
+      border-radius: 50%;
+      top: 50.5%;
+      left: 52%;
+      transform: translate(-50%, -50%) rotate(90deg);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .glow-effect {
+      content: "";
+      position: absolute;
+      top: 53%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,0,0,0.6) 0%, rgba(255,0,0,0.1) 70%, rgba(255,0,0,0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      filter: blur(10px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .glow-effect.active {
+      opacity: 1;
+    }
+
+    .counter {
+      font-size: 2.4em;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    button {
+      font-weight: bold;
+      font-size: 1.5em;
+      padding: 15px 30px;
+      background-color: #d40000;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 70vw;
+      max-width: 300px;
+    }
+
+    button:hover {
+      background-color: #a30000;
+    }
+
+    @media (min-width: 600px) {
+      h1 {
+        font-size: 3em;
+      }
+
+      .buttons {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+
+      button {
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>RCDS ABSCHAFFEN?</h1>
+
+  <div class="clown">
+    <img id="clownImage" src="https://i.imgur.com/VpTsNPV.png" alt="Clown">
+    <div id="clownNose" class="nose">
+      <div id="noseGlow" class="glow-effect"></div>
+    </div>
+  </div>
+
+  <div class="counter">
+    JA: <span id="counter">0</span><br>
+    NEIN: 0
+  </div>
+
+  <div class="buttons">
+    <button onclick="activateClown()">JA</button>
+    <button>NEIN</button>
+  </div>
+
+  <div style="margin-top: 20px; font-weight: bold; font-size: 1em; text-transform: uppercase;">
+    Am 03. Juli OLKS wählen.
+  </div>
+
+  <script>
+    let count = 0;
+
+    function activateClown() {
+      count++;
+      document.getElementById("counter").innerText = count;
+
+      const noseGlow = document.getElementById("noseGlow");
+      noseGlow.classList.add("active");
+
+      setTimeout(() => {
+        noseGlow.classList.remove("active");
+      }, 400);
+    }
+  </script>
+</body>
+</html>
