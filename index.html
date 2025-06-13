@@ -161,7 +161,7 @@
     const response = await fetch(FIREBASE_URL);
     const data = await response.json();
     if (data !== null) {
-      document.getElementById("counter").innerText = data;
+      document.getElementById("counter").innerText = typeof data === 'number' ? data : data.counter ?? 0;
     }
   }
 
