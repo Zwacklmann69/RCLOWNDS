@@ -154,14 +154,29 @@
   </div>
 
   
-<script>
-  const FIREBASE_URL = 'https://clowncounter1312-default-rtdb.firebaseio.com/counter.json';
+<script type="module">
+  // Firebase SDK importieren
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+  import { getDatabase, ref, runTransaction, get } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js';
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyBXcyX6P0majZwtWPqgJQRgKie2_MPTTJA",
+  authDomain: "clowncounter1312.firebaseapp.com",
+  databaseURL: "https://clowncounter1312-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "clowncounter1312",
+  storageBucket: "clowncounter1312.firebasestorage.app",
+  messagingSenderId: "101767677054",
+  appId: "1:101767677054:web:b35cb17f0537624428842f"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const counterRef = ref(db, 'counter');
 
   async function fetchCounter() {
     try {
-      const response = await fetch(FIREBASE_URL);
-      const data = await response.json();
-      const value = typeof data === "number" ? data : (typeof data === "object" && "counter" in data ? data.counter : 0);
+      const snapshot = await get(counterRef);
+      const value = snapshot.exists() ? snapshot.val() : 0;
       document.getElementById("counter").innerText = value;
     } catch (err) {
       console.error("Fehler beim Laden des Counters:", err);
@@ -170,24 +185,10 @@
 
   async function incrementCounter() {
     try {
-      const response = await fetch(FIREBASE_URL);
-      const data = await response.json();
-      let current = typeof data === "number" ? data : (typeof data === "object" && "counter" in data ? data.counter : 0);
-      const updated = current + 1;
-
-      const putRes = await fetch(FIREBASE_URL, {
-        method: "PUT",
-        body: JSON.stringify({ counter: updated }),
-        headers: {
-          "Content-Type": "application/json"
-        }
+      await runTransaction(counterRef, (currentValue) => {
+        return (typeof currentValue === 'number' ? currentValue : 0) + 1;
       });
-
-      if (putRes.ok) {
-        document.getElementById("counter").innerText = updated;
-      } else {
-        console.error("Speichern fehlgeschlagen");
-      }
+      fetchCounter();
     } catch (err) {
       console.error("Fehler beim Hochzählen:", err);
     }
