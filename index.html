@@ -153,22 +153,39 @@
     Am 03. Juli OLKS wählen.
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@countapi/countapi-js@1.0.3/dist/countapi.min.js"></script>
+  
 <script>
-  // Beim Laden: aktuellen Stand holen
-  countapi.get('rcds', 'clown').then(result => {
-    document.getElementById("counter").innerText = result.value;
-  });
+  const FIREBASE_URL = 'https://rcds-counter-default-rtdb.firebaseio.com/counter.json';
+
+  async function fetchCounter() {
+    const response = await fetch(FIREBASE_URL);
+    const data = await response.json();
+    if (data !== null) {
+      document.getElementById("counter").innerText = data;
+    }
+  }
+
+  async function incrementCounter() {
+    const response = await fetch(FIREBASE_URL);
+    let current = await response.json();
+    if (current === null) current = 0;
+    const updated = current + 1;
+    await fetch(FIREBASE_URL, {
+      method: 'PUT',
+      body: JSON.stringify(updated),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    document.getElementById("counter").innerText = updated;
+  }
+
+  fetchCounter();
 
   function activateClown() {
-    // Globalen Zähler erhöhen und anzeigen
-    countapi.hit('rcds', 'clown').then(result => {
-      document.getElementById("counter").innerText = result.value;
-    });
-
+    incrementCounter();
     const noseGlow = document.getElementById("noseGlow");
     noseGlow.classList.add("active");
-
     setTimeout(() => {
       noseGlow.classList.remove("active");
     }, 400);
