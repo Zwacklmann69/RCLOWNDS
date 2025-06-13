@@ -160,14 +160,14 @@
   async function fetchCounter() {
     const response = await fetch(FIREBASE_URL);
     const data = await response.json();
-    const value = typeof data === 'number' ? data : (data?.counter ?? 0);
+    const value = data ?? 0;
     document.getElementById("counter").innerText = value;
   }
 
   async function incrementCounter() {
     const response = await fetch(FIREBASE_URL);
     let current = await response.json();
-    let value = typeof current === 'number' ? current : (current?.counter ?? 0);
+    let value = current ?? 0;
     const updated = value + 1;
 
     await fetch(FIREBASE_URL, {
