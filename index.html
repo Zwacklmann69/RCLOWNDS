@@ -160,16 +160,16 @@
   async function fetchCounter() {
     const response = await fetch(FIREBASE_URL);
     const data = await response.json();
-    if (data !== null) {
-      document.getElementById("counter").innerText = typeof data === 'number' ? data : data.counter ?? 0;
-    }
+    const value = typeof data === 'number' ? data : (data?.counter ?? 0);
+    document.getElementById("counter").innerText = value;
   }
 
   async function incrementCounter() {
     const response = await fetch(FIREBASE_URL);
     let current = await response.json();
-    if (current === null) current = 0;
-    const updated = current + 1;
+    let value = typeof current === 'number' ? current : (current?.counter ?? 0);
+    const updated = value + 1;
+
     await fetch(FIREBASE_URL, {
       method: 'PUT',
       body: JSON.stringify(updated),
@@ -178,6 +178,7 @@
         'Accept': 'application/json'
       }
     });
+
     document.getElementById("counter").innerText = updated;
   }
 
