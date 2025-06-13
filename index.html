@@ -153,29 +153,26 @@
     Am 03. Juli OLKS wählen.
   </div>
 
-  <script>
-    // Beim Laden: aktuellen Stand holen
-    fetch('https://api.countapi.xyz/get/rcds/clown')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("counter").innerText = data.value;
-      });
+  <script src="https://cdn.jsdelivr.net/npm/@countapi/countapi-js@1.0.3/dist/countapi.min.js"></script>
+<script>
+  // Beim Laden: aktuellen Stand holen
+  countapi.get('rcds', 'clown').then(result => {
+    document.getElementById("counter").innerText = result.value;
+  });
 
-    function activateClown() {
-      // Globalen Zähler erhöhen und anzeigen
-      fetch('https://api.countapi.xyz/hit/rcds/clown')
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("counter").innerText = data.value;
-        });
+  function activateClown() {
+    // Globalen Zähler erhöhen und anzeigen
+    countapi.hit('rcds', 'clown').then(result => {
+      document.getElementById("counter").innerText = result.value;
+    });
 
-      const noseGlow = document.getElementById("noseGlow");
-      noseGlow.classList.add("active");
+    const noseGlow = document.getElementById("noseGlow");
+    noseGlow.classList.add("active");
 
-      setTimeout(() => {
-        noseGlow.classList.remove("active");
-      }, 400);
-    }
-  </script>
+    setTimeout(() => {
+      noseGlow.classList.remove("active");
+    }, 400);
+  }
+</script>
 </body>
 </html>
