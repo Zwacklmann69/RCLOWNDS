@@ -158,28 +158,39 @@
   const FIREBASE_URL = 'https://clowncounter1312-default-rtdb.firebaseio.com/counter.json';
 
   async function fetchCounter() {
-    const response = await fetch(FIREBASE_URL);
-    const data = await response.json();
-    const value = data ?? 0;
-    document.getElementById("counter").innerText = value;
+    try {
+      const response = await fetch(FIREBASE_URL);
+      const data = await response.json();
+      const value = typeof data === "number" ? data : 0;
+      document.getElementById("counter").innerText = value;
+    } catch (err) {
+      console.error("Fehler beim Laden des Counters:", err);
+    }
   }
 
   async function incrementCounter() {
-    const response = await fetch(FIREBASE_URL);
-    let current = await response.json();
-    let value = current ?? 0;
-    const updated = value + 1;
+    try {
+      const response = await fetch(FIREBASE_URL);
+      let current = await response.json();
+      let value = typeof current === "number" ? current : 0;
+      const updated = value + 1;
 
-    await fetch(FIREBASE_URL, {
-      method: 'PUT',
-      body: JSON.stringify(updated),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+      const putRes = await fetch(FIREBASE_URL, {
+        method: "PUT",
+        body: JSON.stringify(updated),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (putRes.ok) {
+        document.getElementById("counter").innerText = updated;
+      } else {
+        console.error("Speichern fehlgeschlagen");
       }
-    });
-
-    document.getElementById("counter").innerText = updated;
+    } catch (err) {
+      console.error("Fehler beim Hochzählen:", err);
+    }
   }
 
   fetchCounter();
