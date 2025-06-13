@@ -154,11 +154,20 @@
   </div>
 
   <script>
-    let count = 0;
+    // Beim Laden: aktuellen Stand holen
+    fetch('https://api.countapi.xyz/get/rcds/clown')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("counter").innerText = data.value;
+      });
 
     function activateClown() {
-      count++;
-      document.getElementById("counter").innerText = count;
+      // Globalen Zähler erhöhen und anzeigen
+      fetch('https://api.countapi.xyz/hit/rcds/clown')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("counter").innerText = data.value;
+        });
 
       const noseGlow = document.getElementById("noseGlow");
       noseGlow.classList.add("active");
