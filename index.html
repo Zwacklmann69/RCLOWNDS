@@ -174,7 +174,8 @@
       method: 'PUT',
       body: JSON.stringify(updated),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       }
     });
     document.getElementById("counter").innerText = updated;
